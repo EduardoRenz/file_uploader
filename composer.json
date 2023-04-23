@@ -1,6 +1,7 @@
 {
     "require": {
-        "pcloud/pcloud-php-sdk": "3.*",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "google/apiclient": "^1.1",
+        "vlucas/phpdotenv": "^5.5"
     }
 }
