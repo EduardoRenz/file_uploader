@@ -25,5 +25,6 @@ RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 RUN chown www-data:www-data /tmp
-
 EXPOSE 9000
+EXPOSE 9003
+

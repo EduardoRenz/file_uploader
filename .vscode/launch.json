@@ -8,11 +8,12 @@
             "name": "Listen for Xdebug",
             "type": "php",
             "request": "launch",
-            "port": 9001,
+            "port": 9003,
             "log": true,
             "externalConsole": false,
             "pathMappings": {
-            "/home/app": "${workspaceFolder}/src"
+            "/home/app": "${workspaceFolder}/",
+            "/home/app/src": "${workspaceFolder}/src"
             },
         },
     ]
