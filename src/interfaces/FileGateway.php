@@ -3,5 +3,5 @@
 interface FileGateway
 {
     public function getFiles();
-    public function upload($file);
+    public function upload($file, $name = null);
 }

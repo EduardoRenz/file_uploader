@@ -52,11 +52,11 @@ class GoogleDriveFileGateway implements FileGateway
         }
     }
 
-    public function upload($file)
+    public function upload($file, $name = null)
     {
         try {
             $fileMetadata = new Drive\DriveFile(array(
-                'name' => $file['name'],
+                'name' => $name != null ? $name : $file['name'],
                 'parents' => ['1DUIqGuinrhQfNnyzKFBSZbuh9KW0ZVu5']
             ));
             $content = file_get_contents($file['tmp_name']);
