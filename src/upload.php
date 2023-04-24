@@ -7,7 +7,7 @@ include_once './GoogleDriveFileGateway.php';
 
 
 $drive = new GoogleDriveFileGateway();
-$upload = $drive->upload($_FILES['movie']);
+$upload = $drive->upload($_FILES['movie'], $_POST['name']);
 #$files = $drive->getFiles();
 
 echo "Success";
