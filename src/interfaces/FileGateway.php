@@ -1,7 +1,7 @@
 <?php
 
-interface FileGateway {
+interface FileGateway
+{
     public function getFiles();
-    //public function upload($file); 
-
+    public function upload($file);
 }
