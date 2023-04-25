@@ -2,6 +2,7 @@
     "require": {
         "guzzlehttp/guzzle": "^7.0",
         "google/apiclient": "^2.0",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "aws/aws-sdk-php": "^3.268"
     }
 }

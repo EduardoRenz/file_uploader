@@ -5,17 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Upload</title>
 </head>
 
 <body>
-    <?php
-    include_once './s3/s3.php';
-    $url = generateUploadURL();
-
-    ?>
-
-    <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <form action="upload.php" method="post" enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"><br><br>
         <label for="movie">Movie:</label>
@@ -49,12 +43,10 @@
                 // Handle error response
             };
 
-            xhr.open('POST', <?php echo $url; ?>, true);
+            xhr.open('POST', 'upload.php', true);
             xhr.send(formData);
         });
     </script>
-
-
 </body>
 
 </html>
