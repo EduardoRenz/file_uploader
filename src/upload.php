@@ -1,8 +1,8 @@
 <?php
 include_once './s3/s3.php';
-$url = generateUploadURL();
 
 if (isset($_FILES['movie'])) {
+    $url = generateUploadURL();
     $file = $_FILES['movie'];
     $fileName = $file['name'];
     $fileType = $file['type'];
@@ -15,14 +15,20 @@ if (isset($_FILES['movie'])) {
         'Bucket' => $bucketName,
         'Key' => $imageName,
         'Body' => $fileContent,
-        'ContentType' => $fileType
-        // '@http' => [
-        //     'progress' => function ($downloadTotalSize, $downloadSizeSoFar, $uploadTotalSize, $uploadSizeSoFar) {
-        //         printf(
-        //             "$uploadTotalSize / $uploadTotalSize",
-        //         );
-        //     }
-        // ]
+        'ContentType' => $fileType,
+        '@http' => [
+            'progress' => function ($downloadTotalSize, $downloadSizeSoFar, $uploadTotalSize, $uploadSizeSoFar) {
+                if ($uploadSizeSoFar == 0) return;
+                $percent = ($uploadSizeSoFar * 100) / $uploadTotalSize;
+                echo "
+                    <script>
+                    var progress = document.querySelector('#progress');
+                    var percent = Math.round( $percent);
+                    progress.value = percent;
+                    </script>
+                ";
+            }
+        ]
     ]);
     echo 'Success'; // display uploaded file URL to user
 }

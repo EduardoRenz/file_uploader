@@ -15,7 +15,7 @@
 
     ?>
 
-    <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"><br><br>
         <label for="movie">Movie:</label>
@@ -54,7 +54,7 @@
         });
     </script>
 
-
+    <?php include_once './upload.php'; ?>
 </body>
 
 </html>
