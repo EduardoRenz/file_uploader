@@ -101,13 +101,12 @@
         </div>
         <button type="submit" class="btn">Submit</button>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         var form = document.querySelector('form');
         var progress = document.querySelector('#progress');
         let lastResponseLength = 0;
 
-        form.addEventListener('submit', async function(event) {
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
             let total_progress = 0;
             console.log('start')
@@ -116,30 +115,56 @@
             var name = document.querySelector('#name');
             formData.append("movie", file);
             formData.append("name", name.value)
-            let response = await axios.post('upload.php', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
 
-                onUploadProgress: (p) => {
-                    console.log('Sending to server')
-                    total_progress = (p.progress * 100) / 2
-                    progress.value = total_progress
-                },
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload.php', true);
 
-                onDownloadProgress: (p) => {
-                    let response = p.event.target.response
-                    let part = response.substr(lastResponseLength)
-                    part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0]
-                    let data = JSON.parse(part)
-                    let percent = parseInt(data.percent)
-                    total_progress = 50 + (percent / 2)
-                    progress.value = total_progress
-                    lastResponseLength = response.length
+            xhr.upload.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    let percent = (event.loaded / event.total) * 100;
+                    console.log('Uploading: ' + percent + '%');
+                    // update progress bar
+                    progress.value = (percent / 2);
                 }
-            })
-            console.log('concluido')
-            window.location = 'success.html';
+            };
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // handle success
+                    console.log(xhr.responseText);
+                } else {
+                    // handle error
+                    console.log('Error');
+                }
+            };
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 3) {
+                    // handle download progress
+                    let response = xhr.responseText;
+                    let part = response.substr(lastResponseLength);
+                    part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0];
+                    let data = JSON.parse(part);
+                    let percent = parseInt(data.percent);
+                    total_progress = 50 + (percent / 2);
+                    progress.value = total_progress;
+                    lastResponseLength = response.length;
+                }
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        // handle success
+                        console.log('concluido')
+                        window.location = 'success.html';
+                    } else {
+                        // handle error
+                        console.log('Error');
+                    }
+                }
+            };
+
+
+            xhr.send(formData);
+
 
         })
 
