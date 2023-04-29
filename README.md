@@ -6,7 +6,7 @@ To run this script, you will need:
 
 - PHP 7.0 or higher
 - A Google account
-- A Google Drive API key
+- A Amazon s3 API Key
 ## Installation
 - Clone this repository to your local machine.
 - Run composer install to install the required dependencies.
