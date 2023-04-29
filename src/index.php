@@ -105,6 +105,14 @@
         var progress = document.querySelector('#progress');
         let lastResponseLength = 0;
 
+        function parseData(responseText) {
+            let response = responseText;
+            let part = responseText.substr(lastResponseLength);
+            part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0];
+            let data = JSON.parse(part);
+            return data
+        }
+
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             let total_progress = 0;
@@ -128,7 +136,6 @@
             xhr.onload = () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     // handle success
-                    console.log(xhr.responseText);
                 } else {
                     // handle error
                     console.log('Error');
@@ -138,19 +145,19 @@
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 3) {
                     // handle download progress
-                    let response = xhr.responseText;
-                    let part = response.substr(lastResponseLength);
-                    part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0];
-                    let data = JSON.parse(part);
+                    let data = parseData(xhr.responseText)
                     let percent = parseInt(data.percent);
+
                     total_progress = 50 + (percent / 2);
                     progress.value = total_progress;
-                    lastResponseLength = response.length;
+                    lastResponseLength = xhr.responseText.length;
                 }
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 300) {
+                        let data = parseData(xhr.responseText)
                         // handle success
-                        window.location = 'success.html';
+                        console.log(data)
+                        //window.location = 'success.html';
                     } else {
                         // handle error
                         console.log('Error');
