@@ -122,9 +122,7 @@
             xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
                     let percent = (event.loaded / event.total) * 100;
-                    console.log('Uploading: ' + percent + '%');
-                    // update progress bar
-                    progress.value = (percent / 2);
+                    progress.value = (percent / 2); // update progress bar
                 }
             };
 
@@ -153,7 +151,6 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 300) {
                         // handle success
-                        console.log('concluido')
                         window.location = 'success.html';
                     } else {
                         // handle error
