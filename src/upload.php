@@ -23,13 +23,15 @@ $fileSize = $file['size'];
 $fileTmpName = $file['tmp_name'];
 $uploadURL = generateUploadURL($fileName, $fileType);
 $imageName = isset($_POST['name']) ? $_POST['name'] : $file['name'];
+$hash_file_name = hash('sha256', $imageName);
+$finalImageName = $imageName . '-' . $hash_file_name;
 $fileContent = file_get_contents($fileTmpName);
 set_time_limit(0);
 ob_implicit_flush(1);
 
 $result = $s3->putObject([
     'Bucket' => $bucketName,
-    'Key' => $imageName,
+    'Key' => $finalImageName,
     'Body' => $fileContent,
     'ContentType' => $fileType,
     'Metadata' => array(
@@ -44,4 +46,4 @@ $result = $s3->putObject([
     ]
 ]);
 
-//echo 'Success'; // display uploaded file URL to user
+echo json_encode(['success' => true, 'url' =>  $s3->getObjectUrl($bucketName, $finalImageName)]);
