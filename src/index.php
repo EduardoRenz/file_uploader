@@ -83,11 +83,6 @@
 </style>
 
 <body>
-    <?php
-    include_once './s3/s3.php';
-    $url = generateUploadURL();
-
-    ?>
 
     <form action="" method="POST" enctype="multipart/form-data">
         <h1>Movie Upload</h1>
@@ -97,7 +92,8 @@
         </div>
         <div class="form-group">
             <label for="movie">Movie:</label>
-            <input type="file" id="movie" name="movie">
+            <input type="file" id="movie" name="movie" accept="video/*">
+            <span id="file-size-error" class="error hidden">The file size cannot exceed 100MB.</span>
         </div>
         <div class="form-group">
             <label for="progress">Progress:</label>
@@ -105,40 +101,72 @@
         </div>
         <button type="submit" class="btn">Submit</button>
     </form>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         var form = document.querySelector('form');
         var progress = document.querySelector('#progress');
-        let lastResponseLength = false;
-        form.addEventListener('submit', function(event) {
+        let lastResponseLength = 0;
+
+        form.addEventListener('submit', async function(event) {
             event.preventDefault();
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
+            console.log('start')
+            var formData = new FormData();
+            var file = document.querySelector('#movie').files[0];
+            var name = document.querySelector('#name');
+            formData.append("movie", file);
+            formData.append("name", name.value)
+            let response = await axios.post('upload.php', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
 
-
-            xhr.onprogress = function(e) {
-                let progressResponse;
-                let response = e.currentTarget.response;
-
-                progressResponse = lastResponseLength ?
-                    response.substring(lastResponseLength) :
-                    response;
-
-                lastResponseLength = response.length;
-
-                console.log(progressResponse);
-                progress.value = progressResponse.split('.')[0]
-            }
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && this.status == 200) {
-                    console.log("100.");
+                onDownloadProgress: (p) => {
+                    console.log(p.event.target)
+                    let response = p.event.target.response
+                    let part = response.substr(lastResponseLength)
+                    part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0]
+                    let data = JSON.parse(part)
+                    let percent = parseInt(data.percent)
+                    progress.value = percent
+                    lastResponseLength = response.length
                 }
-            }
-            xhr.open('POST', 'upload.php', true);
-            xhr.send(formData);
-        });
+            })
+
+            console.log('Concluido')
+            window.location = 'success.html';
+
+        })
+
+        // form.addEventListener('submit', function(event) {
+        //     event.preventDefault();
+        //     var formData = new FormData(form);
+        //     var xhr = new XMLHttpRequest();
+
+        //     xhr.onprogress = function(e) {
+        //         let progressResponse;
+        //         let response = e.currentTarget.response;
+
+        //         progressResponse = lastResponseLength ?
+        //             response.substring(lastResponseLength) :
+        //             response;
+
+        //         console.log(progressResponse + "\n")
+        //         lastResponseLength = response.length;
+        //         let parsedResponse = JSON.parse(progressResponse);
+        //         progress.value = parsedResponse.percent
+        //     }
+        //     // xhr.onreadystatechange = function() {
+        //     //     if (xhr.readyState == 4 && this.status == 200) {
+        //     //         let parsedResponse = JSON.parse(xhr.responseText);
+        //     //         if (!parsedResponse.success) alert(parsedResponse.message)
+        //     //         //console.log(xhr.responseText);
+        //     //     }
+        //     // }
+        //     xhr.open('POST', 'upload.php', true);
+        //     xhr.send(formData);
+        //});
     </script>
 
-    <!-- <?php include_once './upload.php'; ?> -->
 </body>
 
 </html>
