@@ -128,13 +128,11 @@
                 },
 
                 onDownloadProgress: (p) => {
-                    console.log(total_progress)
                     let response = p.event.target.response
                     let part = response.substr(lastResponseLength)
                     part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0]
                     let data = JSON.parse(part)
                     let percent = parseInt(data.percent)
-                    console.log(percent)
                     total_progress = 50 + (percent / 2)
                     progress.value = total_progress
                     lastResponseLength = response.length
