@@ -62,7 +62,6 @@
         height: 30px;
     }
 
-
     .btn {
         display: block;
         width: 100%;
@@ -158,41 +157,8 @@
                     }
                 }
             };
-
-
             xhr.send(formData);
-
-
         })
-
-        // form.addEventListener('submit', function(event) {
-        //     event.preventDefault();
-        //     var formData = new FormData(form);
-        //     var xhr = new XMLHttpRequest();
-
-        //     xhr.onprogress = function(e) {
-        //         let progressResponse;
-        //         let response = e.currentTarget.response;
-
-        //         progressResponse = lastResponseLength ?
-        //             response.substring(lastResponseLength) :
-        //             response;
-
-        //         console.log(progressResponse + "\n")
-        //         lastResponseLength = response.length;
-        //         let parsedResponse = JSON.parse(progressResponse);
-        //         progress.value = parsedResponse.percent
-        //     }
-        //     // xhr.onreadystatechange = function() {
-        //     //     if (xhr.readyState == 4 && this.status == 200) {
-        //     //         let parsedResponse = JSON.parse(xhr.responseText);
-        //     //         if (!parsedResponse.success) alert(parsedResponse.message)
-        //     //         //console.log(xhr.responseText);
-        //     //     }
-        //     // }
-        //     xhr.open('POST', 'upload.php', true);
-        //     xhr.send(formData);
-        //});
     </script>
 
 </body>
