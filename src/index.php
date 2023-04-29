@@ -109,6 +109,7 @@
 
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
+            let total_progress = 0;
             console.log('start')
             var formData = new FormData();
             var file = document.querySelector('#movie').files[0];
@@ -120,19 +121,26 @@
                     'Content-Type': 'multipart/form-data'
                 },
 
+                onUploadProgress: (p) => {
+                    console.log('Sending to server')
+                    total_progress = (p.progress * 100) / 2
+                    progress.value = total_progress
+                },
+
                 onDownloadProgress: (p) => {
-                    console.log(p.event.target)
+                    console.log(total_progress)
                     let response = p.event.target.response
                     let part = response.substr(lastResponseLength)
                     part = new RegExp('{([^{}]+)}[^{}]*$').exec(part)[0]
                     let data = JSON.parse(part)
                     let percent = parseInt(data.percent)
-                    progress.value = percent
+                    console.log(percent)
+                    total_progress = 50 + (percent / 2)
+                    progress.value = total_progress
                     lastResponseLength = response.length
                 }
             })
-
-            console.log('Concluido')
+            console.log('concluido')
             window.location = 'success.html';
 
         })
