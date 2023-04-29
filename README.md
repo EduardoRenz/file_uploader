@@ -1,5 +1,5 @@
 # PHP Cloud File Uploader POC
-This is a proof of concept PHP script that demonstrates how to upload files to cloud services, specifically Google Drive. It allows you to select a file from your local machine and upload it to your Google Drive account.
+This is a proof of concept PHP script that demonstrates how to upload files to cloud services, specifically Amazon S3. It allows you to select a file from your local machine and upload it to your Google Drive account.
 
 ## Prerequisites
 To run this script, you will need:
